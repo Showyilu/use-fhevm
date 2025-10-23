@@ -12,6 +12,25 @@ import { ChevronLeft, ChevronRight, BookOpen, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import 'highlight.js/styles/github-dark.css';
 
+// Import markdown files
+import lesson1 from '@/tutorials/lesson-1.md?raw';
+import lesson2 from '@/tutorials/lesson-2.md?raw';
+import lesson3 from '@/tutorials/lesson-3.md?raw';
+import lesson4 from '@/tutorials/lesson-4.md?raw';
+import lesson5 from '@/tutorials/lesson-5.md?raw';
+import lesson6 from '@/tutorials/lesson-6.md?raw';
+import lesson7 from '@/tutorials/lesson-7.md?raw';
+
+const lessonContent: Record<string, string> = {
+  'lesson-1': lesson1,
+  'lesson-2': lesson2,
+  'lesson-3': lesson3,
+  'lesson-4': lesson4,
+  'lesson-5': lesson5,
+  'lesson-6': lesson6,
+  'lesson-7': lesson7,
+};
+
 const Tutorials = () => {
   const { lessonId } = useParams<{ lessonId?: string }>();
   const navigate = useNavigate();
@@ -24,26 +43,17 @@ const Tutorials = () => {
   const nextTutorial = currentIndex < tutorials.length - 1 ? tutorials[currentIndex + 1] : null;
 
   useEffect(() => {
-    if (currentTutorial) {
+    if (currentTutorial && lessonId) {
       setLoading(true);
-      fetch(`/src/tutorials/${currentTutorial.filename}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Failed to fetch tutorial');
-          }
-          return response.text();
-        })
-        .then((text) => {
-          setMarkdownContent(text);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error('Error loading tutorial:', error);
-          setMarkdownContent('# Error loading tutorial\n\nThe requested tutorial could not be loaded.');
-          setLoading(false);
-        });
+      const content = lessonContent[lessonId];
+      if (content) {
+        setMarkdownContent(content);
+      } else {
+        setMarkdownContent('# Error loading tutorial\n\nThe requested tutorial could not be loaded.');
+      }
+      setLoading(false);
     }
-  }, [currentTutorial]);
+  }, [currentTutorial, lessonId]);
 
   if (!lessonId) {
     // Show tutorial list
