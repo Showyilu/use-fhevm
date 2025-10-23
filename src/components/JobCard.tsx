@@ -62,7 +62,10 @@ const JobCard = ({ job, index }: JobCardProps) => {
           ))}
         </div>
 
-        <Button className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90">
+        <Button 
+          className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90"
+          onClick={() => window.open('https://jobs.zama.ai/', '_blank')}
+        >
           <Briefcase className="h-4 w-4 mr-2" />
           Apply Now
         </Button>
